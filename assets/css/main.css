@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 强制覆盖 Vditor 编辑器的行内样式 */
+.vditor-reset {
+  padding: 1rem !important;
+  margin: 0 !important;
+  max-width: none !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* 确保编辑器内容区域使用合理的内边距 */
+.vditor-wysiwyg .vditor-reset,
+.vditor-ir .vditor-reset,
+.vditor-sv .vditor-reset {
+  padding: 1rem !important;
+  margin: 0 !important;
+  max-width: none !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}

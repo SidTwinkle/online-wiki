@@ -1,0 +1,90 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String    @id @default(uuid()) @db.Uuid
+  username     String    @unique @db.VarChar(50)
+  passwordHash String    @map("password_hash") @db.VarChar(255)
+  email        String?   @db.VarChar(255)
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Relations
+  documents Document[]
+  files     File[]
+  sessions  Session[]
+
+  @@map("users")
+}
+
+model Document {
+  id            String     @id @default(uuid()) @db.Uuid
+  title         String     @db.VarChar(255)
+  content       String?
+  contentVector String?    @map("content_vector")
+  type          DocumentType
+  parentId      String?    @map("parent_id") @db.Uuid
+  path          String?
+  position      Int        @default(0)
+  createdAt     DateTime   @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt     DateTime   @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  createdBy     String     @map("created_by") @db.Uuid
+
+  // Relations
+  creator  User        @relation(fields: [createdBy], references: [id])
+  parent   Document?   @relation("DocumentHierarchy", fields: [parentId], references: [id], onDelete: Cascade)
+  children Document[]  @relation("DocumentHierarchy")
+  files    File[]
+
+  @@index([parentId])
+  @@index([path])
+  @@map("documents")
+}
+
+enum DocumentType {
+  document
+  folder
+}
+
+model File {
+  id               String   @id @default(uuid()) @db.Uuid
+  filename         String   @db.VarChar(255)
+  originalFilename String   @map("original_filename") @db.VarChar(255)
+  mimeType         String   @map("mime_type") @db.VarChar(100)
+  size             Int
+  path             String   @db.VarChar(500)
+  documentId       String?  @map("document_id") @db.Uuid
+  createdAt        DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  createdBy        String   @map("created_by") @db.Uuid
+
+  // Relations
+  creator  User      @relation(fields: [createdBy], references: [id])
+  document Document? @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  @@index([documentId])
+  @@map("files")
+}
+
+model Session {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  token     String   @unique @db.VarChar(255)
+  expiresAt DateTime @map("expires_at") @db.Timestamptz(6)
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([token])
+  @@index([userId])
+  @@map("sessions")
+}
