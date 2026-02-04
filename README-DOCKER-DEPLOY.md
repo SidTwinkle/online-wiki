@@ -14,9 +14,8 @@
 ### 2. 自动安装脚本
 
 ```bash
-# 下载并运行部署脚本（如果你的项目在GitHub上）
-# wget https://raw.githubusercontent.com/your-username/your-repo-name/main/deploy-ubuntu.sh
-# 或者直接上传 deploy-ubuntu.sh 文件到服务器
+# 下载并运行部署脚本
+wget https://raw.githubusercontent.com/SidTwinkle/online-wiki/main/deploy-ubuntu.sh
 chmod +x deploy-ubuntu.sh
 sudo ./deploy-ubuntu.sh
 ```
@@ -45,8 +44,8 @@ newgrp docker
 #### 步骤 2: 克隆项目
 
 ```bash
-# 克隆项目到服务器（如果使用Git）
-git clone <your-repository-url> /opt/online-knowledge-base
+# 克隆项目到服务器
+git clone https://github.com/SidTwinkle/online-wiki.git /opt/online-knowledge-base
 cd /opt/online-knowledge-base
 
 # 或者手动上传文件到服务器

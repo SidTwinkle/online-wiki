@@ -47,7 +47,7 @@ sudo ./deploy-ubuntu.sh
 ssh user@your-server-ip
 
 # 克隆项目
-git clone https://github.com/your-username/your-repo-name.git /opt/online-knowledge-base
+git clone https://github.com/SidTwinkle/online-wiki.git /opt/online-knowledge-base
 cd /opt/online-knowledge-base
 
 # 运行部署脚本
